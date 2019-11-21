@@ -1,0 +1,11 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/nike4613/ModSaber-MetadataFileSchema/master/Schema.json",
+  "author": "Kyle1413",
+  "description": "Allows you to change the sounds used for cutting notes and bad hits",
+  "gameVersion": "1.3.0",
+  "id": "HitSoundChanger",
+  "name": "HitSoundChanger",
+  "version": "1.0.0",
+  "features": [
+  ]
+} 
