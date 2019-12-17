@@ -93,7 +93,7 @@ namespace HitSoundChanger
 
         public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
         {
-            if (nextScene.name == "MenuCore")
+            if (nextScene.name == "MenuViewControllers")
                 SharedCoroutineStarter.instance.StartCoroutine(LoadAudio());
         }
 
