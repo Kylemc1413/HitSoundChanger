@@ -9,23 +9,32 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using IPA;
 using IPALogger = IPA.Logging.Logger;
-using Harmony;
+using HarmonyLib;
 using UnityEngine.Networking;
 namespace HitSoundChanger
 {
-    public class Plugin : IBeatSaberPlugin
+    [Plugin(RuntimeOptions.SingleStartInit)]
+    public class Plugin
     {
-        public static AudioClip[] shortHitSoundEffects;
-        public static AudioClip[] longHitSoundEffects;
-        public static AudioClip[] badHitSoundEffects;
+        public static BS_Utils.Utilities.Config Settings = new BS_Utils.Utilities.Config("HitSoundChanger/HitSoundChanger");
 
+        public static List<HitSoundCollection> hitSounds = new List<HitSoundCollection>();
+        public static HitSoundCollection currentHitSound { get; internal set; }
+
+        public static List<AudioClip> originalShortSounds;
+        public static List<AudioClip> originalLongSounds;
+        public static List<AudioClip> originalBadSounds;
+        [OnStart]
         public void OnApplicationStart()
         {
-            var harmony = HarmonyInstance.Create("com.kyle1413.BeatSaber.HitSoundChanger");
+            var harmony = new Harmony("com.kyle1413.BeatSaber.HitSoundChanger");
             harmony.PatchAll(System.Reflection.Assembly.GetExecutingAssembly());
-
+            HitSoundChanger.UI.HitSoundChangerUI.OnLoad();
+            SharedCoroutineStarter.instance.StartCoroutine(LoadAudio());
+            SceneManager.activeSceneChanged += OnActiveSceneChanged;
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
-
+        [Init]
         public void Init(object thisIsNull, IPALogger pluginLogger)
         {
 
@@ -34,48 +43,28 @@ namespace HitSoundChanger
 
         public IEnumerator LoadAudio()
         {
+         
             Utilities.Logging.Log.Notice("Attempting to load Audio files");
             var folderPath = Environment.CurrentDirectory + "/UserData/HitSoundChanger";
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
-            if (shortHitSoundEffects == null || longHitSoundEffects == null)
-                if (File.Exists(folderPath + "/HitSound.ogg"))
-                {
-                    string url1 = "file:///" + folderPath + "/HitSound.ogg";
-                    UnityWebRequest www1 = UnityWebRequestMultimedia.GetAudioClip(url1, AudioType.OGGVORBIS);
-                    AudioClip hitAudio = null;
-                    yield return www1.SendWebRequest();
-
-                    if (www1.isNetworkError)
-                        Utilities.Logging.Log.Notice("Failed to load HitSound audio: " + www1.error);
-                    else
-                        hitAudio = DownloadHandlerAudioClip.GetContent(www1);
-                    if (hitAudio != null)
-                    {
-                        shortHitSoundEffects = new AudioClip[] { hitAudio };
-                        longHitSoundEffects = new AudioClip[] { hitAudio };
-                    }
-                }
-            if (badHitSoundEffects == null)
-                if (File.Exists(folderPath + "/BadHitSound.ogg"))
-                {
-                    string url2 = "file:///" + folderPath + "/BadHitSound.ogg";
-                    UnityWebRequest www2 = UnityWebRequestMultimedia.GetAudioClip(url2, AudioType.OGGVORBIS);
-                    AudioClip badHitAudio = null;
-                    yield return www2.SendWebRequest();
-
-                    if (www2.isNetworkError)
-                        Utilities.Logging.Log.Notice("Failed to load HitSound audio: " + www2.error);
-                    else
-                        badHitAudio = DownloadHandlerAudioClip.GetContent(www2);
-                    if (badHitAudio != null)
-                    {
-                        badHitSoundEffects = new AudioClip[] { badHitAudio };
-                    }
-                }
+            var directories = Directory.GetDirectories(folderPath);
+            hitSounds.Add(new HitSoundCollection { name = "Default", folderPath = "Default" });
+            foreach(var folder in directories)
+            {
+                HitSoundCollection newSounds = new HitSoundCollection(folder);
+                yield return newSounds.LoadSounds();
+                hitSounds.Add(newSounds);
+            }
+            string lastSound = Settings.GetString("HitSoundChanger", "Last Selected Sound", "Default", true);
+            HitSoundCollection lastSounds = hitSounds.FirstOrDefault(x => x.folderPath == lastSound);
+            if (lastSounds == null)
+                lastSounds = hitSounds[0];
+            currentHitSound = lastSounds;
 
 
         }
+      
         public void OnApplicationQuit()
         {
 
@@ -93,8 +82,6 @@ namespace HitSoundChanger
 
         public void OnActiveSceneChanged(Scene prevScene, Scene nextScene)
         {
-            if (nextScene.name == "MenuViewControllers")
-                SharedCoroutineStarter.instance.StartCoroutine(LoadAudio());
         }
 
         public void OnUpdate()

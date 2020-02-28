@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Harmony;
+using HarmonyLib;
 using UnityEngine;
 namespace HitSoundChanger.Harmony_Patches
 {
@@ -13,8 +13,21 @@ namespace HitSoundChanger.Harmony_Patches
     {
         public static void Prefix(ref AudioClip[] ____badCutSoundEffectAudioClips)
         {
-            if (Plugin.badHitSoundEffects == null) return;
-            ____badCutSoundEffectAudioClips = Plugin.badHitSoundEffects;
+            if (Plugin.originalBadSounds == null)
+            {
+                Plugin.originalBadSounds = new List<AudioClip>();
+                Plugin.originalBadSounds.AddRange(____badCutSoundEffectAudioClips);
+            }
+
+            if (Plugin.currentHitSound.badHitSoundEffects == null)
+            {
+                ____badCutSoundEffectAudioClips = Plugin.originalBadSounds.ToArray();
+            }
+            else
+            {
+            ____badCutSoundEffectAudioClips = Plugin.currentHitSound.badHitSoundEffects;
+            }
+
 
         }
     }
@@ -25,9 +38,29 @@ namespace HitSoundChanger.Harmony_Patches
     {
         public static void Prefix(ref AudioClip[] ____longCutEffectsAudioClips, ref AudioClip[] ____shortCutEffectsAudioClips)
         {
-            if (Plugin.longHitSoundEffects == null || Plugin.shortHitSoundEffects == null) return;
-            ____longCutEffectsAudioClips = Plugin.longHitSoundEffects;
-            ____shortCutEffectsAudioClips = Plugin.shortHitSoundEffects;
+            if (Plugin.originalLongSounds == null)
+            {
+                Plugin.originalLongSounds = new List<AudioClip>();
+                Plugin.originalLongSounds.AddRange(____longCutEffectsAudioClips);
+            }
+
+            if (Plugin.originalShortSounds == null)
+            {
+                Plugin.originalShortSounds = new List<AudioClip>();
+                Plugin.originalShortSounds.AddRange(____shortCutEffectsAudioClips);
+            }
+
+            if (Plugin.currentHitSound.longHitSoundEffects == null || Plugin.currentHitSound.shortHitSoundEffects == null)
+            {
+                ____longCutEffectsAudioClips = Plugin.originalLongSounds.ToArray();
+                ____shortCutEffectsAudioClips = Plugin.originalShortSounds.ToArray();
+            }
+            else
+            {
+            ____longCutEffectsAudioClips = Plugin.currentHitSound.longHitSoundEffects;
+            ____shortCutEffectsAudioClips = Plugin.currentHitSound.shortHitSoundEffects;
+            }
+
 
         }
     }
