@@ -18,18 +18,18 @@ namespace HitSoundChanger.UI
 
             }
         }
-        protected override void DidActivate(bool firstActivation, ActivationType activationType)
+        protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
         {
             try
             {
                 if (firstActivation)
                 {
 
-                    title = "Hit Sounds";
+                    SetTitle("Hit Sounds");
                     showBackButton = true;
                     ProvideInitialViewControllers(_soundListView);
                 }
-                if (activationType == ActivationType.AddedToHierarchy)
+                if (addedToHierarchy)
                 {
 
                 }
@@ -45,7 +45,7 @@ namespace HitSoundChanger.UI
         {
             // dismiss ourselves
             var mainFlow = BeatSaberMarkupLanguage.BeatSaberUI.MainFlowCoordinator;
-            mainFlow.DismissFlowCoordinator(this, null, false);
+            mainFlow.DismissFlowCoordinator(this, null, ViewController.AnimationDirection.Horizontal);
         }
     }
 }

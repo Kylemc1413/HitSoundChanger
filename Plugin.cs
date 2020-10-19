@@ -72,7 +72,7 @@ namespace HitSoundChanger
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
         {
-
+            
         }
 
         public void OnSceneUnloaded(Scene scene)

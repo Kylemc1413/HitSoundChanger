@@ -36,6 +36,9 @@
     <Reference Include="0Harmony">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Beat Saber\Libs\0Harmony.dll</HintPath>
     </Reference>
+    <Reference Include="BeatmapCore">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
+    </Reference>
     <Reference Include="BSML">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Beat Saber\Plugins\BSML.dll</HintPath>
     </Reference>
@@ -43,8 +46,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Beat Saber\Plugins\BS_Utils.dll</HintPath>
     </Reference>
+    <Reference Include="Core">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\Core.dll</HintPath>
+    </Reference>
+    <Reference Include="GameplayCore">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\GameplayCore.dll</HintPath>
+    </Reference>
     <Reference Include="HMLib">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\HMLib.dll</HintPath>
+    </Reference>
+    <Reference Include="HMLibAttributes">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\HMLibAttributes.dll</HintPath>
     </Reference>
     <Reference Include="HMUI">
       <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Beat Saber\Beat Saber_Data\Managed\HMUI.dll</HintPath>
