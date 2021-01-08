@@ -17,19 +17,18 @@ namespace HitSoundChanger
         {
             get
             {
+
                 string result = "";
-                if (shortHitSoundEffects != null || longHitSoundEffects != null)
-                {
-                    result = "Hit";
-                    if (badHitSoundEffects != null)
-                        result += ", BadHit";
-                }
-                else if (badHitSoundEffects != null)
-                    result = "BadHit";
-                else
-                {
+                if (shortHitSoundEffects != null || longHitSoundEffects != null) 
+                    result += "Hit";
+                if (badHitSoundEffects != null)
+                    result += ", BadHit";
+                if (missSoundEffect != null)
+                    result += ", Miss";
+                if (result.Length == 0)
                     result = "No Sounds Replaced";
-                }
+                else if (result.StartsWith(", "))
+                    result = result.Remove(0, 2);
                 return result;
             }
         }
@@ -37,6 +36,7 @@ namespace HitSoundChanger
         public AudioClip[] shortHitSoundEffects;
         public AudioClip[] longHitSoundEffects;
         public AudioClip[] badHitSoundEffects;
+        public AudioClip missSoundEffect;
         public HitSoundCollection()
         {
         }
@@ -82,6 +82,23 @@ namespace HitSoundChanger
                     if (badHitAudio != null)
                     {
                         badHitSoundEffects = new AudioClip[] { badHitAudio };
+                    }
+                }
+            if (missSoundEffect == null)
+                if (File.Exists(folderPath + "/MissSound.ogg")) 
+                {
+                    string url3 = "file:///" + folderPath + "/MissSound.ogg";
+                    UnityWebRequest www3 = UnityWebRequestMultimedia.GetAudioClip(url3, AudioType.OGGVORBIS);
+                    AudioClip missAudio = null;
+                    yield return www3.SendWebRequest();
+
+                    if (www3.isNetworkError)
+                        Utilities.Logging.Log.Notice("Failed to load HitSound audio: " + www3.error);
+                    else
+                        missAudio = DownloadHandlerAudioClip.GetContent(www3);
+                    if (missAudio != null) 
+                    {
+                        missSoundEffect =  missAudio;
                     }
                 }
         }

@@ -64,4 +64,34 @@ namespace HitSoundChanger.Harmony_Patches
 
         }
     }
+
+    [HarmonyPatch(typeof(GameNoteController))]
+    [HarmonyPatch("NoteDidPassMissedMarker", MethodType.Normal)]
+    class MissSoundsPatch 
+    {
+        static AudioSource[] audioSources;
+        static float volumeMultiplier = 0.9f;
+
+        public static void Postfix() 
+        {
+            if (Plugin.currentHitSound.missSoundEffect != null) 
+            {
+                if (audioSources == null) 
+                {
+                    audioSources = new AudioSource[64];
+                    for (int i = 0; i < audioSources.Length; i++) 
+                    {
+                        audioSources[i] = new GameObject().AddComponent<AudioSource>();
+                        audioSources[i].clip = Plugin.currentHitSound.missSoundEffect;
+                        audioSources[i].volume = volumeMultiplier;
+                        audioSources[i].gameObject.name = $"MissSoundEffect {i}";
+                        UnityEngine.Object.DontDestroyOnLoad(audioSources[i]);
+                    }
+                }
+                audioSources.First(x => !x.isPlaying).Play();
+            }
+
+
+        }
+    }
 }
