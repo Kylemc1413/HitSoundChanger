@@ -125,9 +125,6 @@
     <Compile Include="UI\HitSoundChangerUI.cs" />
     <Compile Include="UI\SoundListFlowCoordinator.cs" />
     <Compile Include="UI\SoundListView.cs" />
-    <Compile Include="Utilities\Logging.cs" />
-    <Compile Include="Utilities\ReflectionUtil.cs" />
-    <Compile Include="Utilities\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />
