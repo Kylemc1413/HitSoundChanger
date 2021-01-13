@@ -6,7 +6,7 @@ using HarmonyLib;
 using UnityEngine;
 
 
-namespace HitSoundChanger.Harmony_Patches {
+namespace HitSoundChanger.HarmonyPatches {
 
 
     [HarmonyPatch(typeof(NoteCutSoundEffect))]
@@ -58,31 +58,20 @@ namespace HitSoundChanger.Harmony_Patches {
     [HarmonyPatch("NoteDidPassMissedMarker", MethodType.Normal)]
     class MissSoundsPatch {
 
-        static AudioSource[] audioSources;
-        static float volumeMultiplier = 0.6f;
+        public static List<AudioSource> audioSources = new List<AudioSource>();
+        public static float volumeMultiplier = 1;
 
         public static void Postfix() {
             if (Plugin.currentHitSound.missSoundEffect != null) {
-                if (audioSources == null) {
-                    audioSources = new AudioSource[64];
-                    for (int i = 0; i < audioSources.Length; i++) {
-                        audioSources[i] = new GameObject($"MissSoundEffect {i}").AddComponent<AudioSource>();
-                        audioSources[i].clip = Plugin.currentHitSound.missSoundEffect;
-                        audioSources[i].volume = volumeMultiplier;
-                        GameObject.DontDestroyOnLoad(audioSources[i]);
-                    }
+                AudioSource activeAudioSource = audioSources.FirstOrDefault(x => !x.isPlaying);
+                if (activeAudioSource == null) {
+                    activeAudioSource = new GameObject("MissSoundEffect").AddComponent<AudioSource>();
+                    Object.DontDestroyOnLoad(activeAudioSource.gameObject);
+                    audioSources.Add(activeAudioSource);
                 }
-                if (audioSources.FirstOrDefault().clip != Plugin.currentHitSound.missSoundEffect) {
-                    foreach (AudioSource audioSource in audioSources) {
-                        audioSource.clip = Plugin.currentHitSound.missSoundEffect;
-                    }
-                }
-                if (audioSources.FirstOrDefault().volume != volumeMultiplier) {
-                    foreach (AudioSource audioSource in audioSources) {
-                        audioSource.volume = volumeMultiplier;
-                    }
-                }
-                audioSources.First(x => !x.isPlaying).Play();
+                activeAudioSource.clip = Plugin.currentHitSound.missSoundEffect;
+                activeAudioSource.volume = volumeMultiplier * 0.15f;
+                activeAudioSource.Play();
             }
         }
     }

@@ -13,6 +13,7 @@ namespace HitSoundChanger.UI {
         internal SoundListView _soundListViewController;
         internal SoundListFlowCoordinator _soundListFlow;
         public static HitSoundChangerUI _instance;
+
         internal static void OnLoad() {
             if (_instance != null) {
                 return;
