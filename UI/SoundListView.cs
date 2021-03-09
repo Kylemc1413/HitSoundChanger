@@ -40,7 +40,7 @@ namespace HitSoundChanger.UI
             customListTableData.tableView.ReloadData();
             int selectedIndex = Plugin.hitSounds.IndexOf(
                 Plugin.hitSounds.First(x => x.folderPath == Plugin.currentHitSound.folderPath));
-            customListTableData.tableView.ScrollToCellWithIdx(selectedIndex, HMUI.TableViewScroller.ScrollPositionType.Center, false);
+            customListTableData.tableView.ScrollToCellWithIdx(selectedIndex, HMUI.TableView.ScrollPositionType.Center, false);
             customListTableData.tableView.SelectCellWithIdx(selectedIndex);
         }
 
