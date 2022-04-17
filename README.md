@@ -1,8 +1,5 @@
 # HitSoundChanger
 
-This mod is a fork of the [original mod by Kylemc1413](https://github.com/Kylemc1413/HitSoundChanger) and all credits go to him for making this mod.  
-**Donate to the [original mod author](https://ko-fi.com/kyle1413k)**
-
 HitSoundChanger is a mod for Beat Saber that allows you to change the default sounds of beat saber.
 This mod doesn't allow you to change the menu music or level failed sounds only the hit sounds and the bad hit sounds.  
 If you want to change that, check out [DiSounds](https://github.com/Auros/DiSounds) but at this time, this mod isn't updated for the latest versions of the game.
