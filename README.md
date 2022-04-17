@@ -28,11 +28,3 @@ Double check that the HitSoundChanger.dll is in your plugins folder.
 Make sure your game version is supported in the releases.  
 If the mod is still not working, create a new issue, include the issue you are facing and your _latest.log file that is located in your Beat Saber directory then the "logs" folder.  
 Pirated versions of the game aren't supported and no support will be provided.
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
